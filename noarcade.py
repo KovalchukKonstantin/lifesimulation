@@ -54,15 +54,7 @@ def modify(a):
     return a
 
 def update_field(field, cells, xmin, ymin, xmax, ymax, xar, yar):
-    field = [[0] * (xmax - xmin + 3) for i in range(ymax - ymin + 3)]
-    for t in cells:
-        field[t.y-ymin+1][t.x-xmin+1] = t
-    for t in field:
-        for i in t:
-            if isinstance(i, Cell):
-                i.neighbours = 0
-            else:
-                i = 0
+
     for t in cells:
             field[t.y-ymin][t.x-xmin] = modify(field[t.y-ymin][t.x-xmin])
             field[t.y-ymin][t.x-xmin+1]= modify(field[t.y-ymin][t.x-xmin+1])
@@ -76,20 +68,29 @@ def update_field(field, cells, xmin, ymin, xmax, ymax, xar, yar):
         for i in range(len(field[0])):
             if isinstance(field[t][i], Cell):
                 if (field[t][i].neighbours<2 or field[t][i].neighbours>3):
-                    xar.remove(i-xmin+1)
-                    yar.remove(t-ymin+1)
+                    xar.remove(i+xmin-1)
+                    yar.remove(t+ymin-1)
                     cells.remove(field[t][i])
                     field[t][i] = 0
             else:
                 if (field[t][i] == 3):
-                    field[t][i] = Cell(i,t)
+                    field[t][i] = Cell(i-xmin+1,t-ymin+1)
                     cells.append(field[t][i])
-                    xar.append(i)
-                    yar.append(t)
+                    xar.append(i-xmin+1)
+                    yar.append(t-ymin+1)
     ymin = min(yar)
     ymax = max(yar)
     xmin = min(xar)
     xmax = max(xar)
+    field = [[0] * (xmax - xmin + 3) for i in range(ymax - ymin + 3)]
+    for t in cells:
+        field[t.y - ymin + 1][t.x - xmin + 1] = t
+    for t in field:
+        for i in t:
+            if isinstance(i, Cell):
+                i.neighbours = 0
+            else:
+                i = 0
     return field, cells, xmin, ymin, xmax, ymax, xar, yar
 def print_field(field):
     for i in range(len(field)):
@@ -108,15 +109,9 @@ while True:
         print("Life simulation is over")
         break
     elif (t == "c"):
-        field, cells, xmin, ymin, xmax,ymax, xar, yar = update_field(field, cells, xmin, ymin, xmax, ymax, xar, yar)
+        field, cells, xmin, ymin, xmax, ymax, xar, yar = update_field(field, cells, xmin, ymin, xmax, ymax, xar, yar)
         print_field(field)
     else:
         print ("Please enter a valid command")
         continue
 
-# while True:
-#         if keyboard.is_pressed('q'):
-#             print('The simulation is over')
-#             break
-#         if keyboard.is_pressed('Space'):
-#             update_field(field, xmin, ymin)
