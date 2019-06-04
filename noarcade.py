@@ -19,8 +19,9 @@ def create_cells(coordinates, cells):
     while(i<len(coordinates)):
         cells.append(Cell(coordinates[i],coordinates[i+1]))
         i+=2
+    return cells
 b = create_cell_list()
-create_cells(b,cells)
+cells = create_cells(b,cells)
 
 
 xar = []
@@ -50,8 +51,9 @@ def modify(a):
         a.neighbours+=1
     else:
         a+=1
+    return a
 
-def update_field(field, cells, xmin, ymin, xar, yar):
+def update_field(field, cells, xmin, ymin, xmax, ymax, xar, yar):
     field = [[0] * (xmax - xmin + 3) for i in range(ymax - ymin + 3)]
     for t in cells:
         field[t.y-ymin+1][t.x-xmin+1] = t
@@ -62,20 +64,20 @@ def update_field(field, cells, xmin, ymin, xar, yar):
             else:
                 i = 0
     for t in cells:
-            modify(field[t.y-ymin][t.x-xmin])
-            modify(field[t.y-ymin][t.x-xmin+1])
-            modify(field[t.y-ymin][t.x-xmin+2])
-            modify(field[t.y-ymin+1][t.x-xmin])
-            modify(field[t.y-ymin+1][t.x-xmin+2])
-            modify(field[t.y-ymin+2][t.x-xmin])
-            modify(field[t.y-ymin+2][t.x-xmin + 1])
-            modify(field[t.y-ymin+2][t.x-xmin + 2])
+            field[t.y-ymin][t.x-xmin] = modify(field[t.y-ymin][t.x-xmin])
+            field[t.y-ymin][t.x-xmin+1]= modify(field[t.y-ymin][t.x-xmin+1])
+            field[t.y-ymin][t.x-xmin+2] = modify(field[t.y-ymin][t.x-xmin+2])
+            field[t.y-ymin+1][t.x-xmin] = modify(field[t.y-ymin+1][t.x-xmin])
+            field[t.y-ymin+1][t.x-xmin+2] = modify(field[t.y-ymin+1][t.x-xmin+2])
+            field[t.y-ymin+2][t.x-xmin] = modify(field[t.y-ymin+2][t.x-xmin])
+            field[t.y-ymin+2][t.x-xmin + 1] = modify(field[t.y-ymin+2][t.x-xmin + 1])
+            field[t.y-ymin+2][t.x-xmin + 2] = modify(field[t.y-ymin+2][t.x-xmin + 2])
     for t in range(len(field)):
         for i in range(len(field[0])):
             if isinstance(field[t][i], Cell):
                 if (field[t][i].neighbours<2 or field[t][i].neighbours>3):
-                    xar.remove(i)
-                    yar.remove(t)
+                    xar.remove(i-xmin+1)
+                    yar.remove(t-ymin+1)
                     cells.remove(field[t][i])
                     field[t][i] = 0
             else:
@@ -84,7 +86,11 @@ def update_field(field, cells, xmin, ymin, xar, yar):
                     cells.append(field[t][i])
                     xar.append(i)
                     yar.append(t)
-
+    ymin = min(yar)
+    ymax = max(yar)
+    xmin = min(xar)
+    xmax = max(xar)
+    return field, cells, xmin, ymin, xmax, ymax, xar, yar
 def print_field(field):
     for i in range(len(field)):
         for t in range(len(field[0])):
@@ -102,7 +108,7 @@ while True:
         print("Life simulation is over")
         break
     elif (t == "c"):
-        update_field(field, cells, xmin, ymin, xar, yar)
+        field, cells, xmin, ymin, xmax,ymax, xar, yar = update_field(field, cells, xmin, ymin, xmax, ymax, xar, yar)
         print_field(field)
     else:
         print ("Please enter a valid command")
