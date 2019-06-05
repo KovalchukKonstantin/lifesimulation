@@ -74,10 +74,10 @@ def update_field(field, cells, xmin, ymin, xmax, ymax, xar, yar):
                     field[t][i] = 0
             else:
                 if (field[t][i] == 3):
-                    field[t][i] = Cell(i-xmin+1,t-ymin+1)
+                    field[t][i] = Cell(i+xmin-1,t+ymin-1)
                     cells.append(field[t][i])
-                    xar.append(i-xmin+1)
-                    yar.append(t-ymin+1)
+                    xar.append(i+xmin-1)
+                    yar.append(t+ymin-1)
     ymin = min(yar)
     ymax = max(yar)
     xmin = min(xar)
