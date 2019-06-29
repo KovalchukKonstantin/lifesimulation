@@ -6,15 +6,12 @@ class Region:
         self.name = name
         self.color = color
         self.neighbours = []
-        self.neighbour_colors = []
+
 
     def __str__(self):
-        return f'{self.name}: {self.neighbours}'
+        return f'{self.name} {self.color}: {self.neighbours}'
 
-    def neighbour_c(self):
-        for i in self.neighbours:
-            if i.color!=None:
-                self.neighbour_colors.append(i.color)
+
 
 class RegionMap:
     def __init__(self):
