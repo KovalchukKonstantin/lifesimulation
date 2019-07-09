@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name='mapcoloring',
-    version='First verison',
+    name='business',
+    version='First version of the sumulation',
     packages=[''],
-    url='https://github.com/KovalchukKonstantin/lifesimulation/tree/mapcoloring',
+    url='https://github.com/KovalchukKonstantin/lifesimulation/tree/business',
     license='',
     author='kostya',
-    author_email='',
-    description='Try to solve map coloring problem'
+    author_email='kostyak@umich.edu',
+    description='first implementation of the bussiness simulation'
 )
