@@ -1,16 +1,20 @@
-
+from bank import Bank
+from player import Player
 
 
 if __name__ == '__main__':
 
-
-
-
-    turn = 1
-    p = n
-    senior = (turn%2)+1
+    n = input('Please enter the number of players in a simulation: ')
+    players = []
+    playersp = []
+    for i in n:
+        a = Player(i,playersp)
+        playersp.append(a)
+        players.append(a)
+    bank = Bank(len(playersp), n)
     constructions = []
-    while turn != 13 or len(p) != 1:
+    while bank.turn != n+1 or len(playersp) != 1:
+
         for i in constructions:
             if i.length == 1:
                 if i.type == 1:
