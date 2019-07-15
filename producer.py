@@ -15,11 +15,11 @@ class Producer(Player):
 
 
     def produce_action(self):
-        for i in self.af:
+        for i in range(1,self.af+1):
             if self.prod_a(i, 2):
                 continue
             self.prod_a(i,1)
-        for i in self.sf:
+        for i in range(1,self.sf+1):
             self.prod_s(i)
 
     def sell_bid(self, bank):

@@ -1,6 +1,7 @@
 from loan import Loan
 from construction import Construction
 from bet import Bet
+from bank import Bank
 
 class Player:
     def __init__(self, num, players, sf = 2, rmu = 4, fiu = 2, cash = 10000, af = 0):
@@ -19,6 +20,7 @@ class Player:
     def money_check(self):
         self.bankrupt = self.cash<0
         if self.bankrupt:
+            print(f'Player {self.num} went bankrupt')
             self.players.remove(self)
 
 
@@ -31,9 +33,9 @@ class Player:
             self.rmu-=1
             self.cash-=2000
             self.fiu+=1
-            print(f'Factory {sf} made a unit')
+            print(f'Factory {sf} of player {self.num} made a unit')
         else:
-            print(f'Unit on factory {sf} was not produced due to the shortage of either money or raw materials')
+            print(f'Unit on factory {sf} of player {self.num} was not produced due to the shortage of either money or raw materials')
 
     def make_b(self, am, price, bank):
         if price>= bank.rmup and price*am <= self.cash:
@@ -47,15 +49,15 @@ class Player:
             self.rmu -= 1
             self.cash -= 2000
             self.fiu += 1
-            print(f'Factory {af} made a unit')
+            print(f'Factory {af} of player {self.num} made a unit')
             return True
         elif n==2 and self.rmu>1 and self.cash>2999:
             self.rmu -= 2
             self.cash -= 3000
             self.fiu += 2
-            print(f'Factory {af} made two units')
+            print(f'Factory {af} of player {self.num} made two units')
             return True
-        print(f'Factory {af} was unable to produce units requested')
+        print(f'Factory {af} of player {self.num} was unable to produce units requested')
         return False
 
 
@@ -106,3 +108,18 @@ class Player:
             self.lim+=1
             self.cash-=3500
             a = Construction(self, 3)
+    def net_worth(self, bank, constructions):
+        loanam = 0
+        for i in self.loans:
+            loanam+=i.amount
+        constructionam = 0
+        for i in constructions:
+            if i.player == self:
+                if i.type == 1:
+                    constructionam+=2500
+                elif i.type == 2:
+                    constructionam+=5000
+                else:
+                    constructionam+=3500
+        a = self.af * 10000 + self.sf * 5000 + bank.rmup * self.rmu + bank.fiup * self.fiu + self.cash - loanam - constructionam
+        return a

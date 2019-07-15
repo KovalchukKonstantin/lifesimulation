@@ -1,6 +1,5 @@
 import math
 from random import randint
-from bet import Bet
 
 
 def sorting(bid):
@@ -14,7 +13,7 @@ class Bank:
         self.fiup = 5500
         self.lvl = 3
         self.bidsi=[]
-        self.turn = 0
+        self.turn = 1
         self.n = n
         self.senior = (self.turn%self.n)+1
 
@@ -115,7 +114,7 @@ class Bank:
             max = []
             neg = []
             pos = []
-            for i in len(prices):
+            for i in range(len(prices)):
                 if prices[i] > maxv:
                     max = [i]
                     maxv = prices[i]
@@ -126,8 +125,8 @@ class Bank:
                     neg.append(self.bidsi[i])
                 else:
                     pos.append(self.bidsi[i])
-            pos.sort(key = sorting - self.senior)
-            neg.sort(key = sorting -self.senior)
+            pos.sort(key = sorting)
+            neg.sort(key = sorting)
             merged = pos + neg
             for i in merged:
                 if i.num <= self.rmu:
@@ -135,9 +134,12 @@ class Bank:
                     i.player.cash-=(i.num*i.price)
                     self.bidsi.remove(i)
                     self.rmu -= i.num
+                    print(f'Player {i.player.num} got {i.num} rmus for the price of {i.price} each')
                 else:
                     i.player.rmu+=self.rmu
                     i.player.cash-=(self.rmu*i.price)
+                    print(f'Player {i.player.num} got {self.rmu} rmus for the price of {i.price} each')
+                    self.bidsi.remove(i)
                     self.rmu = 0
             prices.clear()
             names.clear()
@@ -154,7 +156,7 @@ class Bank:
             min = []
             neg = []
             pos = []
-            for i in len(prices):
+            for i in range(len(prices)):
                 if prices[i]<minv:
                     minv = prices[i]
                     min = [i]
@@ -165,18 +167,21 @@ class Bank:
                     neg.append(self.bidsi[i])
                 else:
                     pos.append(self.bidsi[i])
-            pos.sort(key=sorting - self.senior)
-            neg.sort(key=sorting - self.senior)
+            pos.sort(key=sorting)
+            neg.sort(key=sorting)
             merged = pos + neg
             for i in merged:
                 if i.num <= self.fiu:
                     i.player.fiu-=i.num
                     i.player.cash+=(i.num*i.price)
+                    print(f'Player {i.player.num} sold {i.num} fius for the price of {i.price} each')
                     self.bidsi.remove(i)
                     self.fiu-=i.num
                 else:
                     i.player.fiu-=self.fiu
                     i.player.cash-=(self.fiu*i.price)
+                    print(f'Player {i.player.num} sold {self.fiu} fius for the price of {i.price} each')
+                    self.bidsi.remove(i)
                     self.fiu = 0
             prices.clear()
             names.clear()
