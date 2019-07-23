@@ -1,10 +1,10 @@
-from loan import Loan
-from construction import Construction
-from bet import Bet
-from bank import Bank
+from business_sim.loan import Loan
+from business_sim.construction import Construction
+from business_sim.bet import Bet
+
 
 class Player:
-    def __init__(self, num, players, sf = 2, rmu = 4, fiu = 2, cash = 10000, af = 0):
+    def __init__(self, num, sf = 2, rmu = 4, fiu = 2, cash = 10000, af = 0):
         self.num = num
         self.sf = sf
         self.af = af
@@ -15,21 +15,19 @@ class Player:
         self.loans = []
         self.loan_am =  (self.sf * 5000 + af * 10000)/2
         self.bankrupt = False
-        self.players = players
+
 
     def money_check(self):
         self.bankrupt = self.cash<0
         if self.bankrupt:
             print(f'Player {self.num} went bankrupt')
-            self.players.remove(self)
-
 
     def pay_fe(self):
         self.cash = self.cash - self.rmu * 300 - self.fiu * 500 - self.sf * 1000 - self.af * 1500
         self.money_check()
 
     def prod_s(self, sf):
-        if self.rmu>0 and self.cash>1999:
+        if self.rmu>0 anкиноd self.cash>1999:
             self.rmu-=1
             self.cash-=2000
             self.fiu+=1
@@ -42,7 +40,7 @@ class Player:
             a = Bet(self, self.num, am, price)
             bank.bidsi.append(a)
         else:
-            print('You cannot make this bid right now')
+            print(f'Player {self.num} couldnt make a bid')
 
     def prod_a(self, af, n):
         if n==1 and self.rmu>0 and self.cash>1999:
@@ -67,7 +65,7 @@ class Player:
             a = Bet(self, self.num, am, price)
             bank.bidsi.append(a)
         else:
-            print('You cannot sell this much for this price right now')
+            print(f'Player {self.num} couldnt make a selling bid')
 
     def pay_i(self):
         for i in self.loans:
@@ -108,6 +106,8 @@ class Player:
             self.lim+=1
             self.cash-=3500
             a = Construction(self, 3)
+        else:
+            print(f'Player {self.num} was unable to start a construction')
     def net_worth(self, bank, constructions):
         loanam = 0
         for i in self.loans:

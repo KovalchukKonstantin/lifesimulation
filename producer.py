@@ -1,4 +1,4 @@
-from player import Player
+from business_sim.player import Player
 
 class Producer(Player):
     def supply_bid(self, bank):
@@ -26,16 +26,19 @@ class Producer(Player):
         if bank.lvl == 1:
             self.sell(self.fiu, 4000 ,bank)
         elif bank.lvl == 2:
-            self.sell(self.fiu-1,4100,bank)
+            if self.fiu > 1:
+                self.sell(self.fiu-1,4100,bank)
         elif bank.lvl == 3:
-            self.sell(self.fiu-2, 4200, bank)
+            if self.fiu > 2:
+                self.sell(self.fiu-2, 4200, bank)
         elif bank.lvl == 4:
-            self.sell(self.fiu-3, 4300, bank)
+            if self.fiu > 3:
+                self.sell(self.fiu-3, 4300, bank)
         else:
             self.sell(1, 6000, bank)
 
     def loan_take(self):
         pass
 
-    def const(self):
+    def const(self, constructions):
         pass

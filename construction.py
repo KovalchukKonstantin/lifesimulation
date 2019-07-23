@@ -3,8 +3,8 @@ class Construction:
     def __init__(self, player, type):
         self.player = player
         self.type = type
-        self.cost
-        self.length
+        self.cost = 0
+        self.length = 0
         if self.type == 1:
             self.length = 5
             self.cost = 5000

@@ -6,16 +6,14 @@ def sorting(bid):
     return bid.name
 
 class Bank:
-    def __init__(self, p, n):
+    def __init__(self, p):
         self.rmu = 2*p
         self.fiu = 2*p
         self.rmup = 500
         self.fiup = 5500
         self.lvl = 3
         self.bidsi=[]
-        self.turn = 1
-        self.n = n
-        self.senior = (self.turn%self.n)+1
+
 
 
     def update_m(self,p):
@@ -100,13 +98,12 @@ class Bank:
             self.fiu = p
             self.rmup = 300
             self.fiup = 4500
-        self.turn +=1
 
 
-    def make_bids(self):
+    def make_bids(self, senior_player):
         prices = []
         names = []
-        while len(self.bidsi) != 0 or self.rmu!=0:
+        while self.bidsi and self.rmu > 0:
             for i in self.bidsi:
                 prices.append(i.price)
                 names.append(i.name)
@@ -121,7 +118,7 @@ class Bank:
                 elif prices[i]== maxv:
                     max.append(i)
             for i in max:
-                if names[i]-self.senior < 0:
+                if names[i]-senior_player < 0:
                     neg.append(self.bidsi[i])
                 else:
                     pos.append(self.bidsi[i])
@@ -132,9 +129,9 @@ class Bank:
                 if i.num <= self.rmu:
                     i.player.rmu+=i.num
                     i.player.cash-=(i.num*i.price)
-                    self.bidsi.remove(i)
                     self.rmu -= i.num
                     print(f'Player {i.player.num} got {i.num} rmus for the price of {i.price} each')
+                    self.bidsi.remove(i)
                 else:
                     i.player.rmu+=self.rmu
                     i.player.cash-=(self.rmu*i.price)
@@ -145,10 +142,10 @@ class Bank:
             names.clear()
         self.bidsi.clear()
 
-    def sell_auction(self):
+    def sell_auction(self, senior_player):
         prices = []
         names = []
-        while len(self.bidsi)!= 0 or self.fiu!=0:
+        while self.bidsi and self.fiu > 0:
             for i in self.bidsi:
                 prices.append(i.price)
                 names.append(i.name)
@@ -163,7 +160,7 @@ class Bank:
                 elif prices[i] == minv:
                     min.append(i)
             for i in min:
-                if names[i] - self.senior < 0:
+                if names[i] - senior_player < 0:
                     neg.append(self.bidsi[i])
                 else:
                     pos.append(self.bidsi[i])
@@ -179,7 +176,7 @@ class Bank:
                     self.fiu-=i.num
                 else:
                     i.player.fiu-=self.fiu
-                    i.player.cash-=(self.fiu*i.price)
+                    i.player.cash+=(self.fiu*i.price)
                     print(f'Player {i.player.num} sold {self.fiu} fius for the price of {i.price} each')
                     self.bidsi.remove(i)
                     self.fiu = 0
