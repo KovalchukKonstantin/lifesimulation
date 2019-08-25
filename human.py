@@ -1,4 +1,4 @@
-from business_sim.player import Player
+from .player import Player
 
 class Human(Player):
     def supply_bid(self, bank):

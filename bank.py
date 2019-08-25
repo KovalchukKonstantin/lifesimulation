@@ -1,5 +1,6 @@
 import math
 from random import randint
+from .graphics import Bankg
 
 
 def sorting(bid):
@@ -13,9 +14,15 @@ class Bank:
         self.fiup = 5500
         self.lvl = 3
         self.bidsi=[]
+        self.graphb = Bankg(self)
 
+    def graphdec(func):
+        def wrapper(*args, **kwargs):
+            func(*args, **kwargs)
+            args[0].graphb.update_b()
+        return wrapper
 
-
+    @graphdec
     def update_m(self,p):
         rd= randint(1,12)
         if self.lvl == 1:
@@ -99,7 +106,7 @@ class Bank:
             self.rmup = 300
             self.fiup = 4500
 
-
+    @graphdec
     def make_bids(self, senior_player):
         prices = []
         names = []
@@ -142,6 +149,7 @@ class Bank:
             names.clear()
         self.bidsi.clear()
 
+    @graphdec
     def sell_auction(self, senior_player):
         prices = []
         names = []
